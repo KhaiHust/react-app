@@ -1,0 +1,71 @@
+
+.app-container{
+  .header-container 
+  {
+    .navbar-nav .nav-link.active{
+      color: #00bff0;
+     }
+     .navbar {
+      z-index: 10;
+      background-color: rgba(0,0,0,0.0) !important;
+      // opacity: 0.6;
+      padding-top: 20px;
+    }
+    .btn-login{
+      border: 1px solid black;
+      border-radius: 5px;
+      padding: 8px 16px !important; 
+      margin-right: 15px;
+      height: 40px;
+    }
+    .btn-signup{
+      color: white;
+      border-radius: 5px;
+      background-color: black;
+      border: 1px solid black;
+      padding: 8px 16px !important; 
+      margin-right: 15px;
+      height: 40px;
+    }
+    
+  }
+  .homepage-container{
+    .homepage-content{
+      position: relative;
+      padding: 100px;
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .title-1{
+      font-size: 60px;
+      font-weight: bold;
+    }
+    .title-2{
+      font-size: 35px;
+    }
+    .title-3{
+      button{
+        font-size: 15px;
+        height: 40px;
+        padding: 8px 16px;
+        line-height: 1.5;
+        background-color: black;
+        color: white;
+        border: 1px solid black;
+        border-radius: 5px;
+      }
+    }
+  }
+}
+
+
+video{
+  position: fixed;
+  width: 100vw;
+  bottom: 0px;
+}
+.container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+  max-width: 1600px !important;
+}
