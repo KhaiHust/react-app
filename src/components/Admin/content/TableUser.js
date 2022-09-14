@@ -1,7 +1,7 @@
 
 
 const TableUser = (props) => {
-    const { listUser, handleCLickBtnUpdate, handleClickBtnView } = props;
+    const { listUser, handleCLickBtnUpdate, handleClickBtnView, handleClickBtnDel } = props;
     return (
         <>
             <div >
@@ -27,7 +27,7 @@ const TableUser = (props) => {
                                         <td>
                                             <button className='btn btn-secondary' onClick={() => handleClickBtnView(item)}>View</button>
                                             <button className='btn btn-warning mx-3' onClick={() => handleCLickBtnUpdate(item)}>Update</button>
-                                            <button className='btn btn-danger'>Delete</button>
+                                            <button className='btn btn-danger' onClick={() => handleClickBtnDel(item)}>Delete</button>
                                         </td>
                                     </tr>
                                 )
