@@ -11,7 +11,7 @@ import ModalDeleteUser from './ModalDeleteUser';
 import TablePaginateUser from './TablePaginateUser';
 
 const ManagerUser = () => {
-    const LIMIT_USER = 3;
+    const LIMIT_USER = 6;
     const [pageCount, setPageCount] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [showModalCreateUser, setShowModalCreateUser] = useState(false);
@@ -23,7 +23,7 @@ const ManagerUser = () => {
     const [listUser, setListUser] = useState([])
 
     useEffect(() => {
-        fetchListUser();
+        //fetchListUser();
         fetchListUserWithPaginate(1);
     }, []);
     const fetchListUser = async () => {
