@@ -1,4 +1,18 @@
 .login-container{
+    .loader-icon {
+        margin-right: 7px;
+        top: 2px;
+        animation: spin 1s infinite linear;
+    }
+    
+    @keyframes spin {
+        from {
+            transform: scale(1) rotate(0deg);
+        }
+        to {
+            transform: scale(1) rotate(360deg);
+        }
+    }
     .header{
         height: 45px;
         text-align: right;
@@ -43,6 +57,9 @@
    button{
     width: 100%;
     margin-top: 10px;
+    &disabled {
+        background: #dddddd;
+      }
    }
    .back{
     cursor: pointer;

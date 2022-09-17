@@ -5,27 +5,32 @@ import { postLogin } from '../../services/apiServices'
 import { ToastContainer, toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { doLogin } from '../../redux/action/userAction';
+import { ImSpinner10 } from 'react-icons/im'
 const Login = (props) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [isLoadingData, setIsLoadingData] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const handleSubmit = async () => {
         //validate
 
         //submit api
-
+        setIsLoadingData(true);
         let data = await postLogin(email, password);
-        console.log(data);
+
         if (data && data.EC === 0) {
             dispatch(doLogin)
             toast.success(data.EM);
+            setIsLoadingData(false);
             navigate('/');
 
         }
         if (data && +data.EC !== 0) {
             toast.error(data.EM);
+            setIsLoadingData(false);
         }
+
     }
     return (
 
@@ -61,8 +66,9 @@ const Login = (props) => {
                     <span>Forgot Password?</span>
                     <br />
 
-                    <button className="btn btn-primary" type="submit" onClick={() => handleSubmit()}>
-
+                    <button className="btn btn-primary" type="submit" onClick={() => handleSubmit()}
+                        disabled={isLoadingData}>
+                        {isLoadingData === true && <ImSpinner10 className='loader-icon' />}
                         Login</button>
                     <div className='text-center mt-2 '>
                         <span className='back' onClick={() => { navigate('/') }}>Go to HomePage</span>
