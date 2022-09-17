@@ -9,13 +9,22 @@
             border-radius: 5px;
             margin-left: 15px;
             padding: 5px;
+            .link-signup{
+                text-decoration: none;
+                color: black;
+            }
             
         }
         button:hover{
-            color: white;
             background-color: black;
+            .link-signup{
+            color: white;
+            
+            }
         }
+        
     }
+    
     .title{
         font-size: 25px;
         padding: 20px 0;

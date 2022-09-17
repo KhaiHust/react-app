@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './Login.scss'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { postLogin } from '../../services/apiServices'
 import { ToastContainer, toast } from 'react-toastify';
 const Login = (props) => {
@@ -13,15 +13,15 @@ const Login = (props) => {
         //submit api
 
         let data = await postLogin(email, password);
-        console.log("check", data);
-        // if (data && data.EC === 0) {
-        //     toast.success(data.EM);
-        //     navigate('/');
+        console.log(data);
+        if (data && data.EC === 0) {
+            toast.success(data.EM);
+            navigate('/');
 
-        // }
-        // if (data && +data.EC !== 0) {
-        //     toast.error(data.EM);
-        // }
+        }
+        if (data && +data.EC !== 0) {
+            toast.error(data.EM);
+        }
     }
     return (
 
@@ -29,7 +29,10 @@ const Login = (props) => {
             <div className="login-container">
                 <div className='header'>
                     <span>Don't have an account yet?</span>
-                    <button>Sign up</button>
+                    <button>
+                        <Link className='link-signup' to={"/signup"}>Sign up
+                        </Link>
+                    </button>
                 </div>
                 <div className='title col-4 mx-auto'>
                     Hoi Dan IT
@@ -38,31 +41,32 @@ const Login = (props) => {
                     Hello, who’s this?
                 </div>
                 <div className='content-form col-4 mx-auto'>
-                    <form>
-                        <div className="form-group">
-                            <label className='form-label' >Email</label>
-                            <input type="email" className="form-control"
 
-                                value={email} onChange={(event) => setEmail(event.target.value)} />
+                    <div className="form-group">
+                        <label className='form-label' >Email</label>
+                        <input type="email" className="form-control"
 
-                        </div>
-                        <div className="form-group">
-                            <label className='form-label'>Password</label>
-                            <input type="password" className="form-control"
-                                value={password} onChange={(event) => setPassword(event.target.value)} />
-                        </div>
-                        <span>Forgot Password?</span>
-                        <br />
+                            value={email} onChange={(event) => setEmail(event.target.value)} />
 
-                        <button className="btn btn-primary" onClick={() => handleSubmit()}>Login</button>
-                        <div className='text-center mt-2 '>
-                            <span className='back' onClick={() => { navigate('/') }}>Go to HomePage</span>
-                        </div>
-                    </form>
+                    </div>
+                    <div className="form-group">
+                        <label className='form-label'>Password</label>
+                        <input type="password" className="form-control"
+                            value={password} onChange={(event) => setPassword(event.target.value)} />
+                    </div>
+                    <span>Forgot Password?</span>
+                    <br />
+
+                    <button className="btn btn-primary" type="submit" onClick={() => handleSubmit()}>
+
+                        Login</button>
+                    <div className='text-center mt-2 '>
+                        <span className='back' onClick={() => { navigate('/') }}>Go to HomePage</span>
+                    </div>
+
                 </div>
 
             </div>
-            {/* <button onClick={() => handleSubmit()}>Ấn vào đây</button> */}
         </>
     )
 }

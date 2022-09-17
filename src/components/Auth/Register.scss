@@ -1,0 +1,54 @@
+.register-container{
+    display: flex;
+    height: 100vh;
+    // overflow: hidden;
+    .left{
+        background-color: black;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+        width: 50%;
+        // justify-content: center;
+
+    }
+    .right{
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 50%;
+        .header{
+            text-align: right;
+            button{
+                border: 1px solid green;
+                border-radius: 5px;
+                padding: 10px;
+                margin:0 20px;
+                .link-login{
+                    text-decoration: none;
+                    color: black;
+                }
+               
+            }
+            button:hover{
+                background-color: black;
+                .link-login{color: white;}
+            }
+            margin-top: 15px;
+        }
+        .title{
+            text-align: center;
+            font-size: 40px;
+            margin: 20px;
+        }
+        .welcome{
+            text-align: center;
+            font-size: 25px;
+            margin: 10px;
+        }
+        .button{
+            width: 100%;
+        }
+
+    }
+}

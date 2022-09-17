@@ -11,6 +11,7 @@ import {
     Route,
 } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
+import Register from './components/Auth/Register';
 const Layout = (props) => {
     return (
         <>
@@ -26,6 +27,8 @@ const Layout = (props) => {
 
                 </Route>
                 <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Register />} />
+
             </Routes>
             <ToastContainer
                 position="top-right"
