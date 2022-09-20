@@ -8,19 +8,31 @@ import DashBoard from './components/Admin/content/dashBoard';
 import Login from './components/Auth/Login';
 import {
     BrowserRouter, Routes,
-    Route,
+    Route, useParams
 } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import Register from './components/Auth/Register';
 import ListQuiz from './components/Users/ListQuiz';
+import DetailQuiz from './components/Users/DetailQuiz';
+const NotFound = () => {
+    return (
+        <div className='alert alert-danger container mt-2'>
+            <main style={{ padding: "1rem" }}>
+                <p>There's nothing here!</p>
+            </main>
+        </div>
+    )
+}
 const Layout = (props) => {
     return (
         <>
             <Routes>
+
                 <Route path="/" element={<App />}>
                     <Route index element={<HomePage />} />
                     <Route path="users" element={<ListQuiz />} />
                 </Route>
+                <Route path="/quiz/:id" element={<DetailQuiz />} />
                 <Route path="/admins" element={<Admin />}
                 >
                     <Route index element={<DashBoard />} />
@@ -29,7 +41,12 @@ const Layout = (props) => {
                 </Route>
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Register />} />
-
+                <Route
+                    path="*"
+                    element={
+                        <NotFound />
+                    }
+                />
             </Routes>
             <ToastContainer
                 position="top-right"

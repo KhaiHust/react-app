@@ -41,7 +41,10 @@ const postLogout = (email, refresh_token) => {
 const getQuizByUser = () => {
     return axios.get('/api/v1/quiz-by-participant')
 }
+const getDataQuiz = (id) => {
+    return axios.get(`/api/v1/questions-by-quiz?quizId=${id}`)
+}
 export {
     postCreateUser, getAllUser, putUpdateUser, deleteUser, getUserWithPaginate,
-    postLogin, postRegister, postLogout, getQuizByUser
+    postLogin, postRegister, postLogout, getQuizByUser, getDataQuiz
 }
