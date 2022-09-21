@@ -6,6 +6,11 @@ const Question = (props) => {
             <></>
         )
     }
+    const handleCheckBox = (event, aId, qId) => {
+        console.log('check', event.target.checked);
+        // console.log("check data", data, id);
+        props.handleCheckBox(aId, qId);
+    }
     return (
         <>
 
@@ -23,7 +28,9 @@ const Question = (props) => {
                                 <div key={`answer-${index}`}
                                     className="a-child">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" />
+                                        <input class="form-check-input" type="checkbox" value=""
+                                            onChange={(event) => handleCheckBox(event, a.id, data.questionId)}
+                                            checked={a.isSelected} />
                                         <label class="form-check-label" >
                                             {a.description}
                                         </label>
