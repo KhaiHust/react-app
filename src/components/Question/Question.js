@@ -27,11 +27,11 @@ const Question = (props) => {
                             return (
                                 <div key={`answer-${index}`}
                                     className="a-child">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value=""
+                                    <div className="form-check">
+                                        <input className="form-check-input" type="checkbox" value=""
                                             onChange={(event) => handleCheckBox(event, a.id, data.questionId)}
                                             checked={a.isSelected} />
-                                        <label class="form-check-label" >
+                                        <label className="form-check-label" >
                                             {a.description}
                                         </label>
                                     </div>
