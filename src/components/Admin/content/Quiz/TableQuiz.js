@@ -1,18 +1,28 @@
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { propTypes } from 'react-bootstrap/esm/Image';
 import Table from 'react-bootstrap/Table';
 import { getAllQuizForAdmin } from '../../../../services/apiServices';
-const TableQuiz = () => {
-    const [listQuiz, setListQuiz] = useState([]);
+import ModalDelQuiz from './ModalDelQuiz';
+import ModalUpdateQuiz from './ModalUpdateQuiz';
+
+const TableQuiz = (props) => {
+    const { show, setShow, handleClickBtnEdit, dataQuizUpdate, resetUpdateQuiz, handleBtnDelQuiz, showDel, setShowDel, dataDelQuiz, listQuiz, fetchQuiz } = props;
+    // const [listQuiz, setListQuiz] = useState([]);
+
     useEffect(() => {
-        fetchQuiz();
-    }, [])
-    const fetchQuiz = async () => {
-        let res = await getAllQuizForAdmin();
-        if (res && res.EC === 0) {
-            setListQuiz(res.DT);
+        const fetchData = async () => {
+            await fetchQuiz();
         }
-    }
+        fetchData();
+    }, [])
+    // const fetchQuiz = async () => {
+    //     let res = await getAllQuizForAdmin();
+    //     if (res && res.EC === 0) {
+    //         setListQuiz(res.DT);
+    //     }
+    // }
+
     return (
         <>
             <div>List Quiz</div>
@@ -35,8 +45,8 @@ const TableQuiz = () => {
                                 <td>{item.description}</td>
                                 <td>{item.difficulty}</td>
                                 <td className='d-flex flex-row gap-3'>
-                                    <button className='btn btn-warning'>Edit</button>
-                                    <button className='btn btn-danger'>Delete</button>
+                                    <button className='btn btn-warning' onClick={() => handleClickBtnEdit(item)}>Edit</button>
+                                    <button className='btn btn-danger' onClick={() => handleBtnDelQuiz(item)}>Delete</button>
                                 </td>
                             </tr>)
                         })}
@@ -44,6 +54,18 @@ const TableQuiz = () => {
 
                     </tbody>
                 </Table>
+                <ModalUpdateQuiz
+                    show={show}
+                    setShow={setShow}
+                    dataQuizUpdate={dataQuizUpdate}
+                    resetUpdateQuiz={resetUpdateQuiz}
+                    fetchQuiz={fetchQuiz} />
+                <ModalDelQuiz
+                    showDel={showDel}
+                    setShowDel={setShowDel}
+                    dataDelQuiz={dataDelQuiz}
+                    fetchQuiz={fetchQuiz}
+                />
             </div></>
     )
 }

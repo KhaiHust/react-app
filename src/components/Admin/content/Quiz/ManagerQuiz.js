@@ -8,6 +8,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import { postCreateNewQuiz } from '../../../../services/apiServices';
 import TableQuiz from './TableQuiz';
 import Accordion from 'react-bootstrap/Accordion';
+import { set } from 'nprogress';
+import { getAllQuizForAdmin } from '../../../../services/apiServices';
+import { useEffect } from 'react';
 const options = [
     { value: 'EASY', label: 'EASY' },
     { value: 'MEDIUM', label: 'MEDIUM' },
@@ -18,7 +21,31 @@ const ManagerQuiz = (props) => {
     const [description, setDescription] = useState("");
     const [type, setType] = useState('');
     const [image, setImage] = useState(null);
+    const [dataQuizUpdate, setDataQuizUpdate] = useState({});
+    const [dataDelQuiz, setDataDelQuiz] = useState({});
+    const [showEdit, setShowEdit] = useState(false);
+    const [showDel, setShowDel] = useState(false);
+    const [listQuiz, setListQuiz] = useState([]);
+    const handleClickBtnEdit = (quiz) => {
 
+        setDataQuizUpdate(quiz);
+        setShowEdit(true);
+        // console.log("check Edit", dataQuizUpdate);
+    }
+    const fetchQuiz = async () => {
+        let res = await getAllQuizForAdmin();
+        if (res && res.EC === 0) {
+            setListQuiz(res.DT);
+        }
+    }
+    const handleBtnDelQuiz = (quiz) => {
+        setDataDelQuiz(quiz);
+        setShowDel(true);
+
+    }
+    const resetUpdateQuiz = () => {
+        setDataQuizUpdate({});
+    }
     const handleChangeFile = (event) => {
         if (event.target && event.target.files && event.target.files[0]) {
             setImage(event.target.files[0]);
@@ -34,11 +61,13 @@ const ManagerQuiz = (props) => {
         console.log(res);
         if (res && res.EC === 0) {
             toast.success(res.EM);
+            await fetchQuiz();
         }
         else {
             toast.error(res.EM);
         }
     }
+
     return (
         <div className="quiz-container">
             <Accordion >
@@ -94,7 +123,18 @@ const ManagerQuiz = (props) => {
             <hr />
 
             <div className="list-detail">
-                <TableQuiz />
+                <TableQuiz
+                    show={showEdit}
+                    setShow={setShowEdit}
+                    handleClickBtnEdit={handleClickBtnEdit}
+                    dataQuizUpdate={dataQuizUpdate}
+                    resetUpdateQuiz={resetUpdateQuiz}
+                    handleBtnDelQuiz={handleBtnDelQuiz}
+                    showDel={showDel}
+                    setShowDel={setShowDel}
+                    dataDelQuiz={dataDelQuiz}
+                    listQuiz={listQuiz}
+                    fetchQuiz={fetchQuiz} />
             </div>
         </div>
     )
