@@ -18,18 +18,13 @@ const Questions = () => {
     const [questions, setQuestions] = useState([
         {
             id: uuidv4(),
-            description: 'question 1',
+            description: '',
             imageFile: '',
             imageName: '',
             answers: [
                 {
                     id: uuidv4(),
-                    description: 'answer 1',
-                    isCorrect: false
-                },
-                {
-                    id: uuidv4(),
-                    description: 'answer 2',
+                    description: '',
                     isCorrect: false
                 }
             ]
@@ -38,15 +33,16 @@ const Questions = () => {
     // console.log(questions);
     const handleAddRemoveQuestion = (type, id) => {
         if (type === 'ADD') {
+
             const newQuestion = {
                 id: uuidv4(),
-                description: 'question 1',
+                description: '',
                 imageFile: '',
                 imageName: '',
                 answers: [
                     {
                         id: uuidv4(),
-                        description: 'answer 1',
+                        description: '',
                         isCorrect: false
                     }
                 ]
@@ -60,7 +56,7 @@ const Questions = () => {
             setQuestions(questionClone);
         }
     }
-    const handleAddRemoveAnser = (type, quesID, ansID) => {
+    const handleAddRemoveAnswer = (type, quesID, ansID) => {
         let questionClone = _.cloneDeep(questions);
         if (type === 'ADD') {
 
@@ -82,6 +78,59 @@ const Questions = () => {
             questionClone[index].answers = questionClone[index].answers.filter(item => item.id !== ansID);
             setQuestions(questionClone);
         }
+    }
+    const handleOnChage = (type, quesID, value) => {
+        let questionClone = _.cloneDeep(questions);
+        if (type === 'QUESTION') {
+            let index = questionClone.findIndex(item => item.id === quesID);
+            if (index > -1) {
+                questionClone[index].description = value;
+                setQuestions(questionClone);
+            }
+        }
+    }
+    const handleOnChageFileQuestion = (quesId, event) => {
+
+        let questionClone = _.cloneDeep(questions);
+
+        let index = questionClone.findIndex(item => item.id === quesId);
+
+        if (index > -1 && event.target && event.target.files && event.target.files[0]) {
+            questionClone[index].imageFile = event.target.files[0];
+
+            questionClone[index].imageName = event.target.files[0].name;
+
+            setQuestions(questionClone);
+        }
+    }
+    const handleAnswerQuestion = (type, quesId, answerId, value) => {
+
+        let questionClone = _.cloneDeep(questions);
+
+        let index = questionClone.findIndex(item => item.id === quesId);
+
+        if (index > -1) {
+
+            questionClone[index].answers = questionClone[index].answers.map(answer => {
+                if (answer.id === answerId) {
+                    if (type === 'CHECKBOX') {
+                        answer.isCorrect = value;
+                    }
+                    if (type === 'INPUT') {
+                        answer.description = value;
+                    }
+
+
+
+                }
+                return answer;
+            })
+            setQuestions(questionClone);
+        }
+
+    }
+    const handleSubmitQuestionForQuiz = () => {
+        console.log(questions);
     }
     return (
         <div className="question-container">
@@ -113,12 +162,15 @@ const Questions = () => {
                                     className="mb-3 description"
                                 >
                                     <Form.Control type="type" placeholder="Description"
-                                        value={item.description} />
+                                        value={item.description}
+                                        onChange={(event) => handleOnChage('QUESTION', item.id, event.target.value)} />
                                 </FloatingLabel>
                                 <div className='group-upload'>
-                                    <label htmlFor='fileUpload' className='label-upload'><RiImageAddFill /></label>
-                                    <input type="file" hidden id='fileUpload'></input>
-                                    <span>myImage.png</span>
+                                    <label htmlFor={`${item.id}`} className='label-upload'
+                                    ><RiImageAddFill /></label>
+                                    <input type={"file"} hidden id={`${item.id}`}
+                                        onChange={(event) => handleOnChageFileQuestion(item.id, event)}></input>
+                                    <span>{item.imageName ? item.imageName : '0 file is uploaded'}</span>
                                 </div>
                                 <div className='btn-add'>
 
@@ -140,20 +192,27 @@ const Questions = () => {
                                 && item.answers.map((answer, index) => {
                                     return (
                                         <div key={answer.id} className='answers-content'>
-                                            <input className="form-check-input" type="checkbox" value=""
+
+                                            <Form.Check
+                                                type={'checkbox'}
+                                                // checked={answer.isCorrect}
+                                                onChange={(event) => handleAnswerQuestion('CHECKBOX', item.id, answer.id, event.target.checked)}
                                             />
+
+
                                             <FloatingLabel
 
                                                 label={`Answer ${index + 1}`}
                                                 className="mb-3 answer-name"
                                             >
-                                                <Form.Control type="text" placeholder="Answer" />
+                                                <Form.Control type="text" placeholder="Answer"
+                                                    onChange={(event) => handleAnswerQuestion('INPUT', item.id, answer.id, event.target.value)} />
                                             </FloatingLabel>
                                             <div className='btn-group'>
-                                                <span onClick={() => handleAddRemoveAnser('ADD', item.id)}>
+                                                <span onClick={() => handleAddRemoveAnswer('ADD', item.id)}>
                                                     <AiOutlinePlusCircle className='icon-add' />
                                                 </span>
-                                                {item.answers.length > 1 && <span onClick={() => handleAddRemoveAnser('REMOVE', item.id, answer.id)}>
+                                                {item.answers.length > 1 && <span onClick={() => handleAddRemoveAnswer('REMOVE', item.id, answer.id)}>
                                                     <AiOutlineMinusCircle className='icon-remove' />
                                                 </span>}
 
@@ -187,7 +246,12 @@ const Questions = () => {
                     )
                 })
             }
-
+            {
+                questions && questions.length > 0 &&
+                <div>
+                    <button onClick={() => handleSubmitQuestionForQuiz()} className='btn btn-warning'>Save Questions </button>
+                </div>
+            }
             {/* <div className='q-main'>
                 <div className='questions-content'>
 
