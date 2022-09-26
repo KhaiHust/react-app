@@ -6,6 +6,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { AiFillPlusCircle, AiFillMinusCircle, AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai'
 import { RiImageAddFill } from 'react-icons/ri'
+import Lightbox from "react-awesome-lightbox";
 import _ from 'lodash'
 const Questions = () => {
     const options = [
@@ -30,6 +31,11 @@ const Questions = () => {
             ]
         }
     ])
+    const [isPreviewImage, setIsPreviewImage] = useState(false);
+    const [dataImagePreview, setDataImagePreview] = useState({
+        url: '',
+        title: ''
+    })
     // console.log(questions);
     const handleAddRemoveQuestion = (type, id) => {
         if (type === 'ADD') {
@@ -132,6 +138,18 @@ const Questions = () => {
     const handleSubmitQuestionForQuiz = () => {
         console.log(questions);
     }
+    const handlePreviewImage = (quesId) => {
+        let questionClone = _.cloneDeep(questions);
+
+        let index = questionClone.findIndex(item => item.id === quesId);
+        if (index > -1) {
+            setDataImagePreview({
+                url: URL.createObjectURL(questionClone[index].imageFile),
+                title: questionClone[index].imageName
+            })
+            setIsPreviewImage(true);
+        }
+    }
     return (
         <div className="question-container">
             <div className="title">
@@ -145,182 +163,105 @@ const Questions = () => {
                     onChange={setSelectedQuiz}
                     options={options}
                 />
-            </div>
-            <div className='mt-3 mb-2'>
-                Add question:
-            </div>
-            {
-                questions && questions.length > 0
-                && questions.map((item, index) => {
-                    return (
-                        <div key={item.id} className='q-main'>
-                            <div className='questions-content'>
+                <div className='mt-3 mb-2'>
+                    Add question:
+                </div>
 
-                                <FloatingLabel
+                {
+                    questions && questions.length > 0
+                    && questions.map((item, index) => {
+                        return (
+                            <div key={item.id} className='q-main'>
+                                <div className='questions-content'>
 
-                                    label={`Question ${index + 1} description`}
-                                    className="mb-3 description"
-                                >
-                                    <Form.Control type="type" placeholder="Description"
-                                        value={item.description}
-                                        onChange={(event) => handleOnChage('QUESTION', item.id, event.target.value)} />
-                                </FloatingLabel>
-                                <div className='group-upload'>
-                                    <label htmlFor={`${item.id}`} className='label-upload'
-                                    ><RiImageAddFill /></label>
-                                    <input type={"file"} hidden id={`${item.id}`}
-                                        onChange={(event) => handleOnChageFileQuestion(item.id, event)}></input>
-                                    <span>{item.imageName ? item.imageName : '0 file is uploaded'}</span>
-                                </div>
-                                <div className='btn-add'>
+                                    <FloatingLabel
 
-                                    <span onClick={() => handleAddRemoveQuestion('ADD', '')}>
-                                        <AiFillPlusCircle className='icon-add' />
-                                    </span>
-                                    {questions.length > 1 &&
-                                        <span onClick={() => handleAddRemoveQuestion('REMOVE', item.id)}>
-                                            <AiFillMinusCircle className='icon-remove' />
+                                        label={`Question ${index + 1} description`}
+                                        className="mb-3 description"
+                                    >
+                                        <Form.Control type="type" placeholder="Description"
+                                            value={item.description}
+                                            onChange={(event) => handleOnChage('QUESTION', item.id, event.target.value)} />
+                                    </FloatingLabel>
+                                    <div className='group-upload'>
+                                        <label htmlFor={`${item.id}`} className='label-upload'
+                                        ><RiImageAddFill /></label>
+                                        <input type={"file"} hidden id={`${item.id}`}
+                                            onChange={(event) => handleOnChageFileQuestion(item.id, event)}></input>
+                                        <span >{item.imageName ?
+                                            <span onClick={() => handlePreviewImage(item.id)}>{item.imageName}</span> :
+                                            '0 file is uploaded'}</span>
+                                    </div>
+                                    <div className='btn-add'>
+
+                                        <span onClick={() => handleAddRemoveQuestion('ADD', '')}>
+                                            <AiFillPlusCircle className='icon-add' />
                                         </span>
-                                    }
+                                        {questions.length > 1 &&
+                                            <span onClick={() => handleAddRemoveQuestion('REMOVE', item.id)}>
+                                                <AiFillMinusCircle className='icon-remove' />
+                                            </span>
+                                        }
+
+                                    </div>
+
 
                                 </div>
+                                {
+                                    item.answers && item.answers.length > 0
+                                    && item.answers.map((answer, index) => {
+                                        return (
+                                            <div key={answer.id} className='answers-content'>
+
+                                                <Form.Check
+                                                    type={'checkbox'}
+                                                    // checked={answer.isCorrect}
+                                                    onChange={(event) => handleAnswerQuestion('CHECKBOX', item.id, answer.id, event.target.checked)}
+                                                />
+
+
+                                                <FloatingLabel
+
+                                                    label={`Answer ${index + 1}`}
+                                                    className="mb-3 answer-name"
+                                                >
+                                                    <Form.Control type="text" placeholder="Answer"
+                                                        onChange={(event) => handleAnswerQuestion('INPUT', item.id, answer.id, event.target.value)} />
+                                                </FloatingLabel>
+                                                <div className='btn-group'>
+                                                    <span onClick={() => handleAddRemoveAnswer('ADD', item.id)}>
+                                                        <AiOutlinePlusCircle className='icon-add' />
+                                                    </span>
+                                                    {item.answers.length > 1 && <span onClick={() => handleAddRemoveAnswer('REMOVE', item.id, answer.id)}>
+                                                        <AiOutlineMinusCircle className='icon-remove' />
+                                                    </span>}
+
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                }
+
 
 
                             </div>
-                            {
-                                item.answers && item.answers.length > 0
-                                && item.answers.map((answer, index) => {
-                                    return (
-                                        <div key={answer.id} className='answers-content'>
-
-                                            <Form.Check
-                                                type={'checkbox'}
-                                                // checked={answer.isCorrect}
-                                                onChange={(event) => handleAnswerQuestion('CHECKBOX', item.id, answer.id, event.target.checked)}
-                                            />
-
-
-                                            <FloatingLabel
-
-                                                label={`Answer ${index + 1}`}
-                                                className="mb-3 answer-name"
-                                            >
-                                                <Form.Control type="text" placeholder="Answer"
-                                                    onChange={(event) => handleAnswerQuestion('INPUT', item.id, answer.id, event.target.value)} />
-                                            </FloatingLabel>
-                                            <div className='btn-group'>
-                                                <span onClick={() => handleAddRemoveAnswer('ADD', item.id)}>
-                                                    <AiOutlinePlusCircle className='icon-add' />
-                                                </span>
-                                                {item.answers.length > 1 && <span onClick={() => handleAddRemoveAnswer('REMOVE', item.id, answer.id)}>
-                                                    <AiOutlineMinusCircle className='icon-remove' />
-                                                </span>}
-
-                                            </div>
-                                        </div>
-                                    )
-                                })
-                            }
-                            {/* <div className='answers-content'>
-                                <input className="form-check-input" type="checkbox" value=""
-                                />
-                                <FloatingLabel
-
-                                    label="Answer 1"
-                                    className="mb-3 answer-name"
-                                >
-                                    <Form.Control type="text" placeholder="Answer" />
-                                </FloatingLabel>
-                                <div className='btn-group'>
-                                    <span>
-                                        <AiOutlinePlusCircle className='icon-add' />
-                                    </span>
-                                    <span>
-                                        <AiOutlineMinusCircle className='icon-remove' />
-                                    </span>
-
-                                </div>
-                            </div> */}
-
-                        </div>
-                    )
-                })
-            }
-            {
-                questions && questions.length > 0 &&
-                <div>
-                    <button onClick={() => handleSubmitQuestionForQuiz()} className='btn btn-warning'>Save Questions </button>
-                </div>
-            }
-            {/* <div className='q-main'>
-                <div className='questions-content'>
-
-                    <FloatingLabel
-
-                        label="Description"
-                        className="mb-3 description"
-                    >
-                        <Form.Control type="text" placeholder="Description" />
-                    </FloatingLabel>
-                    <div className='group-upload'>
-                        <label htmlFor='fileUpload' className='label-upload'><RiImageAddFill /></label>
-                        <input type="file" hidden id='fileUpload'></input>
-                        <span>myImage.png</span>
+                        )
+                    })
+                }
+                {
+                    questions && questions.length > 0 &&
+                    <div>
+                        <button onClick={() => handleSubmitQuestionForQuiz()} className='btn btn-warning'>Save Questions </button>
                     </div>
-                    <div className='btn-add'>
-                        <span>
-                            <AiFillPlusCircle className='icon-add' />
-                        </span>
-                        <span>
-                            <AiFillMinusCircle className='icon-remove' />
-                        </span>
-
-                    </div>
+                }
+                {isPreviewImage === true &&
+                    <Lightbox
+                        image={dataImagePreview.url}
+                        title={dataImagePreview.title}
+                        onClose={() => setIsPreviewImage(false)} />}
+            </div>
 
 
-                </div>
-                <div className='answers-content'>
-                    <input className="form-check-input" type="checkbox" value=""
-                    />
-                    <FloatingLabel
-
-                        label="Answer 1"
-                        className="mb-3 answer-name"
-                    >
-                        <Form.Control type="text" placeholder="Answer" />
-                    </FloatingLabel>
-                    <div className='btn-group'>
-                        <span>
-                            <AiOutlinePlusCircle className='icon-add' />
-                        </span>
-                        <span>
-                            <AiOutlineMinusCircle className='icon-remove' />
-                        </span>
-
-                    </div>
-                </div>
-                <div className='answers-content'>
-                    <input className="form-check-input" type="checkbox" value=""
-                    />
-                    <FloatingLabel
-
-                        label="Answer 1"
-                        className="mb-3 answer-name"
-                    >
-                        <Form.Control type="text" placeholder="Answer" />
-                    </FloatingLabel>
-                    <div className='btn-group'>
-                        <span>
-                            <AiOutlinePlusCircle className='icon-add' />
-                        </span>
-                        <span>
-                            <AiOutlineMinusCircle className='icon-remove' />
-                        </span>
-
-                    </div>
-                </div>
-
-            </div> */}
         </div >
     )
 }
