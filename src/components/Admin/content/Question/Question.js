@@ -8,11 +8,12 @@ import { AiFillPlusCircle, AiFillMinusCircle, AiOutlineMinusCircle, AiOutlinePlu
 import { RiImageAddFill } from 'react-icons/ri'
 import Lightbox from "react-awesome-lightbox";
 import _ from 'lodash'
+import { Toast } from 'bootstrap';
 import { getAllQuizForAdmin, postCreateNewQAnswerForQuestion, postCreateNewQuestionForQuiz } from '../../../../services/apiServices';
+import { toast } from 'react-toastify';
+import index from 'toastify';
 const Questions = (props) => {
-    const [selectedQuiz, setSelectedQuiz] = useState({});
-
-    const [questions, setQuestions] = useState([
+    const initQuestion = [
         {
             id: uuidv4(),
             description: '',
@@ -26,7 +27,10 @@ const Questions = (props) => {
                 }
             ]
         }
-    ])
+    ]
+    const [selectedQuiz, setSelectedQuiz] = useState({});
+
+    const [questions, setQuestions] = useState(initQuestion)
     const [isPreviewImage, setIsPreviewImage] = useState(false);
     const [dataImagePreview, setDataImagePreview] = useState({
         url: '',
@@ -42,7 +46,7 @@ const Questions = (props) => {
             let newQuiz = res.DT.map(item => {
                 return {
                     value: item.id,
-                    label: `${item.id} - item.description`
+                    label: `${item.id} - ${item.description}`
                 }
 
             })
@@ -150,22 +154,61 @@ const Questions = (props) => {
 
     }
     const handleSubmitQuestionForQuiz = async () => {
-        console.log("check", questions, selectedQuiz);
+
+        //validate
+        // if (_.isEmpty(selectedQuiz)) {
+        //     toast.error("Please choose a Quiz!");
+        //     return;
+        // }
+        // validate answer
+        let indexQ = 0, indexA = 0;
+        let isValid = true;
+        for (let i = 0; i < questions.length; i++) {
+
+            for (let j = 0; j < questions[i].answers.length; j++) {
+                if (!questions[i].answers[j].description) {
+                    isValid = false;
+                    indexA = j;
+                    break;
+
+                }
+            }
+            indexQ = i;
+            if (isValid === false) break;
+        }
+        if (isValid === false) {
+            toast.error(`Not empty Answer ${indexA + 1} at Question ${indexQ + 1}`);
+            return;
+        }
+        //validate question
+        let isValidQuestion = true;
+        for (let i = 0; i < questions.length; i++) {
+            if (!questions[i].description) {
+                isValidQuestion = false;
+                indexQ = i;
+                break;
+
+            }
+
+            if (isValidQuestion === false) break;
+        }
+        if (isValidQuestion === false) {
+            toast.error(`Not empty Description at Question ${indexQ + 1}`);
+            return;
+        }
 
         //submit question
-        await Promise.all(questions.map(async (question) => {
+        for (const question of questions) {
             const q = await postCreateNewQuestionForQuiz(+selectedQuiz.value,
                 question.description, question.imageFile);
             //submit answer
-            await Promise.all(
-                question.answers.map(async (answer) => {
-                    await postCreateNewQAnswerForQuestion(
-                        answer.description, answer.isCorrect, q.DT.id)
-                }
-                )
-            )
-
-        }));
+            for (const answer of question.answers) {
+                await postCreateNewQAnswerForQuestion(
+                    answer.description, answer.isCorrect, q.DT.id)
+            }
+        };
+        toast.success('Create questions and answers sucess!')
+        setQuestions(initQuestion);
 
     }
     const handlePreviewImage = (quesId) => {
