@@ -4,12 +4,14 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { postLogout } from '../../services/apiServices'
+import { doLogout } from '../../redux/action/userAction';
 const Header = () => {
     const isAuthenticated = useSelector(state => state.user.isAuthenticated);
     const account = useSelector(state => state.user.account);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const handleLogin = () => {
         navigate('/login')
 
@@ -17,20 +19,21 @@ const Header = () => {
     const handleSignUp = () => {
         navigate('/signup')
     }
-    // const handleLogout = async (account) => {
+    const handleLogout = async (account) => {
 
-    //     let data = await postLogout(account.email, account.refresh_token);
-    //     console.log(account);
-    //     if (data && data.EC === 0) {
-    //         toast.success(data.EM);
-    //         navigate('/');
+        let data = await postLogout(account.email, account.refresh_token);
 
-    //     }
-    //     if (data && +data.EC !== 0) {
-    //         toast.error(data.EM);
-    //     }
-    //     navigate('/');
-    // }
+        if (data && data.EC === 0) {
+            toast.success(data.EM);
+            dispatch(doLogout());
+            navigate('/');
+
+        }
+        if (data && +data.EC !== 0) {
+            toast.error(data.EM);
+        }
+        navigate('/');
+    }
     return (
         <Navbar bg="light" expand="lg">
             <Container>
@@ -55,16 +58,17 @@ const Header = () => {
 
                             <NavDropdown title="Setting" id="basic-nav-dropdown">
 
-                                <NavDropdown.Item href="#action/3.1">Login</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2"
-                                // onClick={() => handleLogout(account)}
-                                >
-                                    Logout
-                                </NavDropdown.Item>
+
+
 
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item href="#action/3.4">
                                     Profile
+                                </NavDropdown.Item>
+                                <NavDropdown.Item href="#action/3.2"
+                                    onClick={() => handleLogout(account)}
+                                >
+                                    Logout
                                 </NavDropdown.Item>
                             </NavDropdown>
                         }

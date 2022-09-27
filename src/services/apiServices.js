@@ -36,7 +36,7 @@ const postRegister = (email, username, password) => {
     return axios.post('api/v1/register', { email, username, password });
 }
 const postLogout = (email, refresh_token) => {
-    return axios.post('api/v1/register', { email, refresh_token });
+    return axios.post('/api/v1/logout', { email, refresh_token });
 }
 const getQuizByUser = () => {
     return axios.get('/api/v1/quiz-by-participant')

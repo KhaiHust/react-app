@@ -12,6 +12,14 @@ const Login = (props) => {
     const [isLoadingData, setIsLoadingData] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const onKeyDown = (event) => {
+        // 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            event.stopPropagation();
+            handleSubmit();
+        }
+    }
     const handleSubmit = async () => {
         //validate
 
@@ -62,7 +70,8 @@ const Login = (props) => {
                     <div className="form-group">
                         <label className='form-label'>Password</label>
                         <input type="password" className="form-control"
-                            value={password} onChange={(event) => setPassword(event.target.value)} />
+                            value={password} onChange={(event) => setPassword(event.target.value)}
+                            onKeyDown={(event) => onKeyDown(event)} />
                     </div>
                     <span>Forgot Password?</span>
                     <br />
