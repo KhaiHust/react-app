@@ -11,6 +11,8 @@ import Accordion from 'react-bootstrap/Accordion';
 import { set } from 'nprogress';
 import { getAllQuizForAdmin } from '../../../../services/apiServices';
 import { useEffect } from 'react';
+import QuizQA from './QuizQA';
+import AssignQuiz from './AssignQuiz';
 const options = [
     { value: 'EASY', label: 'EASY' },
     { value: 'MEDIUM', label: 'MEDIUM' },
@@ -116,26 +118,48 @@ const ManagerQuiz = (props) => {
 
                             </fieldset>
                         </div>
+                        <div className="list-detail">
+                            <TableQuiz
+                                show={showEdit}
+                                setShow={setShowEdit}
+                                handleClickBtnEdit={handleClickBtnEdit}
+                                dataQuizUpdate={dataQuizUpdate}
+                                resetUpdateQuiz={resetUpdateQuiz}
+                                handleBtnDelQuiz={handleBtnDelQuiz}
+                                showDel={showDel}
+                                setShowDel={setShowDel}
+                                dataDelQuiz={dataDelQuiz}
+                                listQuiz={listQuiz}
+                                fetchQuiz={fetchQuiz} />
+                        </div>
+                    </Accordion.Body>
+                </Accordion.Item>
+
+                <Accordion.Item eventKey="1">
+                    <Accordion.Header> <div className="title">
+                        Update Quiz
+                    </div></Accordion.Header>
+                    <Accordion.Body>
+
+                        <QuizQA />
+                    </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey='2'>
+                    <Accordion.Header >
+                        <div className='title'>
+                            Assign User
+                        </div>
+
+                    </Accordion.Header>
+                    <Accordion.Body>
+                        <AssignQuiz />
                     </Accordion.Body>
                 </Accordion.Item>
             </Accordion>
 
-            <hr />
 
-            <div className="list-detail">
-                <TableQuiz
-                    show={showEdit}
-                    setShow={setShowEdit}
-                    handleClickBtnEdit={handleClickBtnEdit}
-                    dataQuizUpdate={dataQuizUpdate}
-                    resetUpdateQuiz={resetUpdateQuiz}
-                    handleBtnDelQuiz={handleBtnDelQuiz}
-                    showDel={showDel}
-                    setShowDel={setShowDel}
-                    dataDelQuiz={dataDelQuiz}
-                    listQuiz={listQuiz}
-                    fetchQuiz={fetchQuiz} />
-            </div>
+
+
         </div>
     )
 }

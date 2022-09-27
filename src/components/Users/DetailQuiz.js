@@ -7,6 +7,7 @@ import _ from 'lodash'
 import './DetailQuiz.scss'
 import Question from "../Question/Question";
 import ModalResult from "./ModalResult";
+import RightContent from "./Content/RightContent";
 const DetailQuiz = (props) => {
     const params = useParams();
     const location = useLocation();
@@ -92,14 +93,14 @@ const DetailQuiz = (props) => {
         //     ]
         // }
         let payload = {
-            quizId: quizId,
+            quizId: +quizId,
             answers: [],
         }
         let answers = [];
         if (dataQuiz && dataQuiz.length > 0) {
             dataQuiz.forEach(item => {
 
-                let questionId = item.questionId;
+                let questionId = +item.questionId;
                 let userAnswerId = [];
                 item.answers.forEach(a => {
                     if (a.isSelected === true) {
@@ -114,6 +115,7 @@ const DetailQuiz = (props) => {
             payload.answers = answers;
 
             //submit api
+            console.log("check payload", payload)
             let res = await postSubmitAnswer(payload);
             console.log("check res", res);
             if (res && res.EC === 0) {
@@ -156,7 +158,10 @@ const DetailQuiz = (props) => {
 
             </div>
             <div className="right-content">
-                count down
+                <RightContent
+                    dataQuiz={dataQuiz}
+                    handleFinish={handleFinish}
+                    setIndex={setIndex} />
             </div>
             <ModalResult
                 show={isShowModalResult}
