@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { ToastContainer, toast } from 'react-toastify'
 import { postRegister } from '../../services/apiServices';
+import Language from '../Header/Language';
 const Register = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -40,6 +41,7 @@ const Register = () => {
                         <button>
                             <Link to={'/login'} className='link-login'>Login</Link>
                         </button>
+                        <Language />
                     </div>
                     <div className='title col-4 mx-auto'>
                         Hoi Dan IT

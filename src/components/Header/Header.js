@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
 import { postLogout } from '../../services/apiServices'
 import { doLogout } from '../../redux/action/userAction';
+import Language from './Language';
 const Header = () => {
     const isAuthenticated = useSelector(state => state.user.isAuthenticated);
     const account = useSelector(state => state.user.account);
@@ -58,20 +59,19 @@ const Header = () => {
 
                             <NavDropdown title="Setting" id="basic-nav-dropdown">
 
-
-
-
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item href="#action/3.4">
                                     Profile
                                 </NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2"
+                                <NavDropdown.Item
                                     onClick={() => handleLogout(account)}
                                 >
                                     Logout
                                 </NavDropdown.Item>
                             </NavDropdown>
+
                         }
+                        <Language />
                     </Nav>
                 </Navbar.Collapse>
             </Container>

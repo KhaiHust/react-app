@@ -2,7 +2,7 @@ import App from './App';
 import User from './components/Users/User';
 import Admin from './components/Admin/Admin';
 import HomePage from './components/Home/HomePage';
-
+import { Suspense } from 'react';
 import ManagerUser from './components/Admin/content/managerUser';
 import DashBoard from './components/Admin/content/dashBoard';
 import Login from './components/Auth/Login';
@@ -28,7 +28,9 @@ const NotFound = () => {
 }
 const Layout = (props) => {
     return (
-        <>
+        <Suspense fallback="...is loading">
+
+
             <Routes>
 
                 <Route path="/" element={<App />}>
@@ -76,7 +78,7 @@ const Layout = (props) => {
                 draggable
                 pauseOnHover
             />
-        </>
+        </Suspense>
     )
 }
 export default Layout

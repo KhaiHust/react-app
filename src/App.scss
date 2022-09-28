@@ -72,3 +72,6 @@ video{
 .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
   max-width: 1600px !important;
 }
+.languages{
+  .dropdown-toggle:after { content: none !important }
+}
