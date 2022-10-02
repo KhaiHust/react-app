@@ -39,13 +39,13 @@ const DetailQuiz = (props) => {
                         item.answers.isSelected = false;
                         answers.push(item.answers);
                     })
-
+                    answers = _.orderBy(answers, ['id'], ['asc']);
                     // detail.questionId = key;
                     return { questionId: key, answers, questionDescription, image };
                 }
 
                 )
-                .value()
+                .value();
             setDataQuiz(data);
 
         }

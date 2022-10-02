@@ -40,6 +40,15 @@
         .admin-header{
             height: 40px;
             border: 1px solid green;
+            padding: 0 20px !important;
+            .leftside{
+                cursor: pointer;
+                font-size: 20px;
+            }
+            .rightside {
+                display: flex;
+                gap: 10px;
+            }
         }
         .admin-main{
             
